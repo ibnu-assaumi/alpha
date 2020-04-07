@@ -1,3 +1,3 @@
 # alpha
 
-Go Architecture Research And Development
+Simple Go Architecture Research And Development Project
