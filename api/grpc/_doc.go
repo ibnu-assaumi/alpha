@@ -10,6 +10,6 @@ Dissemination of this information or reproduction of this material is strictly f
 unless prior written permission is obtained from PT Bhinneka Mentari Dimensi
 */
 
-// package charlie (version 1) of repository is a package which handles read / wrtie data transaction to data storage
-// such as postgresql, mongodb, elasticsearch, produce kafka message, etc..
-package charlie
+// Package grpc is a package that supposed handle requests of api project.
+// this will be added soon after finished develop the service package
+package grpc

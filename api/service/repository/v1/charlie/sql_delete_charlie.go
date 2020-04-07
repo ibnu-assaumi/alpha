@@ -9,8 +9,8 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/opentracing/opentracing-go"
 
-	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 	"github.com/Bhinneka/alpha/api/lib/tracer"
+	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 )
 
 func (impl sql) DeleteCharlie(ctx context.Context, db *gorm.DB, param domainCharlie.Domain) (result domainCharlie.Domain, err error) {
