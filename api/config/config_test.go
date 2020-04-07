@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"regexp"
@@ -25,6 +26,7 @@ var _ = func() (_ struct{}) {
 
 func TestInit(t *testing.T) {
 	t.Run("SUCCESS", func(t *testing.T) {
-		Init()
+		ctx := context.Background()
+		Init(ctx)
 	})
 }

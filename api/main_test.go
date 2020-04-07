@@ -11,6 +11,7 @@ func Test_main(t *testing.T) {
 	t.Run("POSITIVE_MAIN", func(t *testing.T) {
 		go main()
 		time.Sleep(1 * time.Second)
+		wg.Done()
 	})
 
 	t.Run("NEGATIVE_MAIN", func(t *testing.T) {

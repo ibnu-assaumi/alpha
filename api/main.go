@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"sync"
 
 	"github.com/joho/godotenv"
@@ -12,6 +13,7 @@ import (
 
 var (
 	errorLoadENV = godotenv.Load(".env")
+	wg           sync.WaitGroup
 )
 
 func main() {
@@ -19,11 +21,17 @@ func main() {
 		panic(errorLoadENV)
 	}
 
-	config.Init()
+	ctx := context.Background()
+	config.Init(ctx)
+
+	defer func() {
+		config.PostgresRead.Close()
+		config.PostgresWrite.Close()
+		config.MongoDB.Client().Disconnect(ctx)
+	}()
 
 	migration.MigrateSQL()
 
-	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
 		echo.Start()
