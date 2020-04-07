@@ -5,7 +5,7 @@ import (
 
 	"github.com/Bhinneka/alpha/api/lib/response"
 	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
-	sqlCharlie "github.com/Bhinneka/alpha/api/service/usecase/v1/charlie/internal/sql"
+	sqlCharlie "github.com/Bhinneka/alpha/api/service/repository/v1/charlie"
 )
 
 type usecase struct {

@@ -10,6 +10,6 @@ Dissemination of this information or reproduction of this material is strictly f
 unless prior written permission is obtained from PT Bhinneka Mentari Dimensi
 */
 
-// Package sql (version 1) is charlie's internal package which handles data access object of sql database
+// package charlie (version 1) is charlie's internal package which handles data access object of sql database
 // such as get list of charlie data, add new charlie data, update existing charlie data, soft delete existing charlie data
-package sql
+package charlie

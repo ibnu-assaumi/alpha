@@ -1,4 +1,4 @@
-package sql
+package charlie
 
 import (
 	"context"
@@ -13,40 +13,33 @@ import (
 	"github.com/Bhinneka/alpha/api/lib/tracer"
 )
 
-// UpdateCharlie : update exsisting charlie data by given parameter from sql database
-func (impl sql) UpdateCharlie(ctx context.Context, db *gorm.DB, param domainCharlie.Domain) (result domainCharlie.Domain, err error) {
-	const operationName string = "Repository_SQL_UpdateCharlie"
+func (impl sql) DeleteCharlie(ctx context.Context, db *gorm.DB, param domainCharlie.Domain) (result domainCharlie.Domain, err error) {
+	const operationName string = "Repository_SQL_DeleteCharlie"
 
 	span, _ := opentracing.StartSpanFromContext(ctx, operationName)
 	defer span.Finish()
 
 	err = db.Model(&result).
 		Where("status_record <> ?", constant.StatusRecordDelete).
+		Where("charlie_id = ?", param.CharlieID).
 		Updates(param).Error
 
 	if err != nil {
 		tracer.SetErrorOpentracing(span, "sql_update", err)
 		sentry.CaptureException(err)
-		return param, err
-	}
-
-	err = db.Find(&result).Error
-	if err != nil {
-		tracer.SetErrorOpentracing(span, "sql_update", err)
-		sentry.CaptureException(err)
-		return param, err
+		return result, err
 	}
 
 	chrlieHistory := domainCharlie.DomainHistory{
-		CharlieID:      param.CharlieID,
-		CharlieName:    param.CharlieName,
-		EmbeddedStatus: param.EmbeddedStatus,
+		CharlieID:      result.CharlieID,
+		CharlieName:    result.CharlieName,
+		EmbeddedStatus: result.EmbeddedStatus,
 	}
 
-	if err = db.Create(&chrlieHistory).Error; err != nil {
+	if err := db.Create(&chrlieHistory).Error; err != nil {
 		tracer.SetErrorOpentracing(span, "sql_insert_history", err)
 		sentry.CaptureException(err)
-		return param, err
+		return result, err
 	}
 
 	return result, nil

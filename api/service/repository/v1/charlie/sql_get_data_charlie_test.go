@@ -1,4 +1,4 @@
-package sql
+package charlie
 
 import (
 	"context"
@@ -12,9 +12,10 @@ import (
 	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 )
 
-func Test_sql_GetTotalDataCharlie(t *testing.T) {
+func Test_sql_GetDataCharlie(t *testing.T) {
+
 	t.Parallel()
-	t.Run("POSITIVE_GET_TOTAL_DATA_CHARLIE", func(t *testing.T) {
+	t.Run("POSITIVE_GET_DATA_CHARLIE", func(t *testing.T) {
 		sql, mock, _ := sqlmock.New()
 		db, _ := gorm.Open("postgres", sql)
 
@@ -24,14 +25,16 @@ func Test_sql_GetTotalDataCharlie(t *testing.T) {
 			CharlieName: "name",
 		}
 		repoSQL := NewSQL()
-		rows := mock.NewRows([]string{"count"}).AddRow(1)
+		rows := mock.NewRows([]string{"charlie_id", "charlie_name"}).
+			AddRow(1, "one").
+			AddRow(2, "two")
 
 		mock.ExpectQuery("^SELECT .*").WillReturnRows(rows)
-		_, err := repoSQL.GetTotalDataCharlie(ctx, db, param)
+		_, err := repoSQL.GetDataCharlie(ctx, db, param)
 		assert.NoError(t, err)
 	})
 
-	t.Run("NEGATIVE_GET_TOTAL_DATA_CHARLIE", func(t *testing.T) {
+	t.Run("NEGATIVE_GET_DATA_CHARLIE", func(t *testing.T) {
 		sql, mock, _ := sqlmock.New()
 		db, _ := gorm.Open("postgres", sql)
 
@@ -43,7 +46,7 @@ func Test_sql_GetTotalDataCharlie(t *testing.T) {
 		repoSQL := NewSQL()
 
 		mock.ExpectQuery("^SELECT .*").WillReturnError(errors.New("error"))
-		_, err := repoSQL.GetTotalDataCharlie(ctx, db, param)
+		_, err := repoSQL.GetDataCharlie(ctx, db, param)
 		assert.Error(t, err)
 	})
 }

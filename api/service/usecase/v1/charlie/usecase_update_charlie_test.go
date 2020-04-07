@@ -16,7 +16,7 @@ import (
 	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 	"github.com/Bhinneka/alpha/api/lib/constant"
 	"github.com/Bhinneka/alpha/api/lib/record"
-	mockRepo "github.com/Bhinneka/alpha/api/service/usecase/v1/charlie/internal/sql/mocks"
+	mockRepo "github.com/Bhinneka/alpha/api/service/repository/v1/charlie/mocks"
 )
 
 func Test_usecase_UpdateCharlie(t *testing.T) {
