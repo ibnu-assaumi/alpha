@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/updateCharlie",
+  "definitions": {
+      "updateCharlie": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+              "charlieID": {
+                "type" : "number",
+                "minimum": 1
+              },
+              "charlieName": {
+                  "type": "string",
+                  "minLength": 1
+              }
+          },
+          "required": [ "charlieID" , "charlieName"],
+          "title": "schema validation update charlie"
+      }
+  }
+}

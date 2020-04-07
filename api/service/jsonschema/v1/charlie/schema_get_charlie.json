@@ -1,0 +1,69 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$ref": "#/definitions/getCharlie",
+	"definitions": {
+		"getCharlie": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"charlieID": {
+					"type": "number"
+				},
+				"charlieName": {
+					"type": "string"
+				},
+				"page": {
+					"type": "number",
+					"minimum": 1
+				},
+				"limit": {
+					"type": "number",
+					"minimum": 1,
+					"maximum": 100
+				},
+				"orderBy": {
+					"enum": [
+						"charlieID",
+						"charlieName"
+					]
+				},
+				"descending": {
+					"type": "boolean"
+				}
+			},
+			"required": [
+				"page",
+				"limit",
+				"orderBy",
+				"descending"
+			],
+			"allOf": [
+				{
+					"anyOf": [
+						{
+							"properties": {
+								"orderBy": {
+									"const": "charlieID"
+								}
+							},
+							"required": [
+								"charlieID"
+							]
+						},
+						{
+							"properties": {
+								"orderBy": {
+									"const": "charlieName"
+								}
+							},
+							"required": [
+								"charlieName"
+							]
+						}
+					]
+				}
+			],
+			"title": "schema validation get charlie"
+		}
+	}
+}

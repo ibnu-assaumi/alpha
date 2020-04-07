@@ -1,0 +1,93 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$ref": "#/definitions/getCharlie",
+	"definitions": {
+		"getCharlie": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"charlieID": {
+					"type": "number"
+				},
+				"charlieName": {
+					"type": "string"
+				},
+				"page": {
+					"type": "number",
+					"minimum": 1
+				},
+				"limit": {
+					"type": "number",
+					"minimum": 1,
+					"maximum": 100
+				},
+				"orderBy": {
+					"enum": [
+						"charlieID",
+						"charlieName"
+					]
+				},
+				"descending": {
+					"type": "boolean"
+				}
+			},
+			"required": [
+				"charlieID",
+				"charlieName",
+				"page",
+				"limit",
+				"orderBy",
+				"descending"
+			],
+			"allOf": [
+				{
+					"oneOf": [
+						{
+							"properties": {
+								"charlieID": {
+									"type": "number",
+									"minimum": 1
+								}
+							},
+							"required": ["charlieID"]
+						},
+						{
+							"properties": {
+								"charlieName": {
+									"type": "string",
+									"minLength": 1
+								}
+							},
+							"required": ["charlieName"]
+						}
+					]
+				},
+				{
+					"anyOf": [
+						{
+							"properties": {
+								"orderBy": {
+									"const": "charlieID"
+								}
+							},
+							"required": [
+								"charlieID"
+							]
+						},
+						{
+							"properties": {
+								"orderBy": {
+									"const": "charlieName"
+								}
+							},
+							"required": [
+								"charlieName"
+							]
+						}
+					]
+				}
+			],
+			"title": "schema validation get charlie"
+		}
+	}
+}

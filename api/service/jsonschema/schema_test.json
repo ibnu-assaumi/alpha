@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/schemaTest",
+  "definitions": {
+      "schemaTest": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+              "id": {
+                  "type": "number"
+              },
+              "stringVal": {
+                  "type": "string",
+                  "minLength": 1
+              }
+          },
+          "required": [
+            "id",
+            "stringVal"
+        ],
+        "title": "test validate schema"
+      }
+  }
+}
