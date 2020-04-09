@@ -4,14 +4,14 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Bhinneka/alpha/api/config/internal/postgresql/postgresqltest"
+	"github.com/Bhinneka/alpha/api/config/internal/internaltest"
 )
 
 func Test_setDBStats(t *testing.T) {
 	t.Parallel()
 	t.Run("POSITIVE_SET_DB_STATS", func(t *testing.T) {
-		postgresqltest.LoadEnv()
-		db := postgresqltest.GetFakeDB()
+		internaltest.LoadEnv()
+		db := internaltest.GetFakeDB()
 		setDBStats(db, dbTypeRead)
 	})
 
@@ -21,7 +21,7 @@ func Test_setDBStats(t *testing.T) {
 				t.Errorf("The code did not panic")
 			}
 		}()
-		db := postgresqltest.GetFakeDB()
+		db := internaltest.GetFakeDB()
 		db.Close() // close the database to make it panic
 		setDBStats(db, dbTypeRead)
 	})
@@ -32,19 +32,19 @@ func Test_setDBStats(t *testing.T) {
 				t.Errorf("The code did not panic")
 			}
 		}()
-		db := postgresqltest.GetFakeDB()
+		db := internaltest.GetFakeDB()
 		setDBStats(db, "")
 	})
 
 	t.Run("NEGATIVE_SET_LOG_MODE", func(t *testing.T) {
-		db := postgresqltest.GetFakeDB()
+		db := internaltest.GetFakeDB()
 		defer db.Close()
 		os.Setenv("READ_POSTGRES_DB_LOG_MODE", "x")
 		setDBStats(db, dbTypeRead)
 	})
 
 	t.Run("NEGATIVE_SET_MAX_IDLE_CONN", func(t *testing.T) {
-		db := postgresqltest.GetFakeDB()
+		db := internaltest.GetFakeDB()
 		defer db.Close()
 		os.Setenv("READ_POSTGRES_DB_LOG_MODE", "true")
 		os.Setenv("READ_POSTGRES_DB_MAX_IDLE_CONN", "x")
@@ -52,7 +52,7 @@ func Test_setDBStats(t *testing.T) {
 	})
 
 	t.Run("NEGATIVE_SET_MAX_OPEN_CONN", func(t *testing.T) {
-		db := postgresqltest.GetFakeDB()
+		db := internaltest.GetFakeDB()
 		defer db.Close()
 		os.Setenv("READ_POSTGRES_DB_LOG_MODE", "true")
 		os.Setenv("READ_POSTGRES_DB_MAX_IDLE_CONN", "10")
@@ -61,7 +61,7 @@ func Test_setDBStats(t *testing.T) {
 	})
 
 	t.Run("NEGATIVE_SET_MAX_LIFE_TIME", func(t *testing.T) {
-		db := postgresqltest.GetFakeDB()
+		db := internaltest.GetFakeDB()
 		defer db.Close()
 		os.Setenv("READ_POSTGRES_DB_LOG_MODE", "true")
 		os.Setenv("READ_POSTGRES_DB_MAX_IDLE_CONN", "10")

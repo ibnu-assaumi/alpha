@@ -5,11 +5,13 @@ import (
 
 	"github.com/Bhinneka/alpha/api/lib/response"
 	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
-	sqlCharlie "github.com/Bhinneka/alpha/api/service/repository/v1/charlie"
+	repoCharlie "github.com/Bhinneka/alpha/api/service/repository/v1/charlie"
 )
 
 type usecase struct {
-	repoSQL sqlCharlie.SQL
+	repoSQL     repoCharlie.SQL
+	repoMongo   repoCharlie.MongoDB
+	repoElastic repoCharlie.Elastic
 }
 
 // UseCase : charlie business logic layer
@@ -23,6 +25,8 @@ type UseCase interface {
 // NewUseCase : new charlie business logic layer
 func NewUseCase() UseCase {
 	return usecase{
-		repoSQL: sqlCharlie.NewSQL(),
+		repoSQL:     repoCharlie.NewSQL(),
+		repoMongo:   repoCharlie.NewMongoDB(),
+		repoElastic: repoCharlie.NewElastic(),
 	}
 }

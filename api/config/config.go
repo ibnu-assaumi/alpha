@@ -4,11 +4,12 @@ import (
 	"context"
 	"sync"
 
-	"github.com/Bhinneka/alpha/api/config/internal/mongodb"
-
+	elasticsearch7 "github.com/elastic/go-elasticsearch/v7"
 	"github.com/jinzhu/gorm"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"github.com/Bhinneka/alpha/api/config/internal/elasticsearch"
+	"github.com/Bhinneka/alpha/api/config/internal/mongodb"
 	"github.com/Bhinneka/alpha/api/config/internal/opentracing"
 	"github.com/Bhinneka/alpha/api/config/internal/postgresql"
 	"github.com/Bhinneka/alpha/api/config/internal/sentry"
@@ -22,6 +23,8 @@ var (
 	PostgresWrite *gorm.DB
 	// MongoDB : mongodb database client
 	MongoDB *mongo.Database
+	// ElasticSearch : elastic search client
+	ElasticSearch *elasticsearch7.Client
 )
 
 // Init : initialize configuration once
@@ -32,5 +35,6 @@ func Init(ctx context.Context) {
 		PostgresRead = postgresql.GetDBRead()
 		PostgresWrite = postgresql.GetDBWrite()
 		MongoDB = mongodb.GetDB(ctx)
+		ElasticSearch = elasticsearch.GetESClient()
 	})
 }

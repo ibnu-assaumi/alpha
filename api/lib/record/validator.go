@@ -21,11 +21,19 @@ func ValidateString(s string) *string {
 	return &s
 }
 
-// ValidateDate : validate empty date
-func ValidateDate(date time.Time, layout string) *string {
+// ValidateDateString : validate empty date return as string
+func ValidateDateString(date time.Time, layout string) *string {
 	if date.IsZero() {
 		return nil
 	}
 	dateString := date.Format(layout)
 	return &dateString
+}
+
+// ValidateDateTime : validate empty date return as date
+func ValidateDateTime(date time.Time) *time.Time {
+	if date.IsZero() {
+		return nil
+	}
+	return &date
 }

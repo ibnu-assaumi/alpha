@@ -26,11 +26,7 @@ func (impl usecase) AddCharlie(ctx context.Context, param domainCharlie.ParamAdd
 	span, spanCTX := opentracing.StartSpanFromContext(ctx, operationName)
 	defer span.Finish()
 
-	var err error
-	db := config.PostgresWrite.Begin()
-	defer record.FinishTransaction(db, err)
-
-	if err = jsonschema.Validate(schemaFileName, param); err != nil {
+	if err := jsonschema.Validate(schemaFileName, param); err != nil {
 		tracer.SetErrorOpentracing(span, constant.ErrorTypeValidateParam, err)
 		return response.BadRequest(err.Error())
 	}
@@ -39,12 +35,16 @@ func (impl usecase) AddCharlie(ctx context.Context, param domainCharlie.ParamAdd
 		CharlieName: param.CharlieName,
 	}
 
+	db := config.PostgresWrite.Begin()
+
 	isCharlieExists, err := impl.repoSQL.IsExistsCharlie(spanCTX, db, paramCharlie)
 	if err != nil {
+		db.Rollback()
 		return response.InternalServerError()
 	}
 
 	if isCharlieExists {
+		db.Rollback()
 		err = fmt.Errorf("charlieName '%s' already exists", param.CharlieName)
 		tracer.SetErrorOpentracing(span, constant.ErrorTypeExists, err)
 		return response.BadRequest(err.Error())
@@ -60,8 +60,16 @@ func (impl usecase) AddCharlie(ctx context.Context, param domainCharlie.ParamAdd
 
 	data, err := impl.repoSQL.InsertCharlie(spanCTX, db, paramCharlie)
 	if err != nil {
+		db.Rollback()
 		return response.InternalServerError()
 	}
+
+	db.Commit()
+
+	ctxStorage := context.Background()
+	go impl.repoMongo.InsertCharlieHistory(ctxStorage, config.MongoDB, data)
+
+	go impl.repoElastic.UpsertCharlie(ctxStorage, config.ElasticSearch, data)
 
 	meta := response.Meta{
 		TotalData: 1,

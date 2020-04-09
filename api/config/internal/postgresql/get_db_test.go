@@ -3,14 +3,14 @@ package postgresql
 import (
 	"testing"
 
-	"github.com/Bhinneka/alpha/api/config/internal/postgresql/postgresqltest"
+	"github.com/Bhinneka/alpha/api/config/internal/internaltest"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetDBRead(t *testing.T) {
 	t.Parallel()
 	t.Run("POSITIVE_GET_DB_READ", func(t *testing.T) {
-		postgresqltest.LoadEnv()
+		internaltest.LoadEnv()
 		db := GetDBRead()
 		defer db.Close()
 		assert.NotNil(t, db)
@@ -25,7 +25,7 @@ func TestGetDBRead(t *testing.T) {
 			}
 		}()
 
-		postgresqltest.SetFakeENV()
+		internaltest.SetFakeENV()
 		GetDBRead()
 	})
 }
@@ -33,7 +33,7 @@ func TestGetDBRead(t *testing.T) {
 func TestGetDBWrite(t *testing.T) {
 	t.Parallel()
 	t.Run("POSITIVE_GET_DB_WRITE", func(t *testing.T) {
-		postgresqltest.LoadEnv()
+		internaltest.LoadEnv()
 		db := GetDBWrite()
 		defer db.Close()
 		assert.NotNil(t, db)
@@ -48,7 +48,7 @@ func TestGetDBWrite(t *testing.T) {
 			}
 		}()
 
-		postgresqltest.SetFakeENV()
+		internaltest.SetFakeENV()
 		GetDBWrite()
 	})
 }

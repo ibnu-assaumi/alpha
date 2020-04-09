@@ -15,7 +15,7 @@ import (
 )
 
 var _ = func() (_ struct{}) {
-	re := regexp.MustCompile(`^(.*citizenship-api)`)
+	re := regexp.MustCompile(`^(.*api)`)
 	cwd, _ := os.Getwd()
 	rootPath := re.Find([]byte(cwd))
 

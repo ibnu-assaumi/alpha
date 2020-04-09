@@ -30,17 +30,5 @@ func (impl sql) DeleteCharlie(ctx context.Context, db *gorm.DB, param domainChar
 		return result, err
 	}
 
-	chrlieHistory := domainCharlie.DomainHistory{
-		CharlieID:      result.CharlieID,
-		CharlieName:    result.CharlieName,
-		EmbeddedStatus: result.EmbeddedStatus,
-	}
-
-	if err := db.Create(&chrlieHistory).Error; err != nil {
-		tracer.SetErrorOpentracing(span, "sql_insert_history", err)
-		sentry.CaptureException(err)
-		return result, err
-	}
-
 	return result, nil
 }

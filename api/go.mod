@@ -4,6 +4,9 @@ go 1.13
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.1
+	github.com/confluentinc/confluent-kafka-go v1.3.0
+	github.com/elastic/go-elasticsearch v0.0.0
+	github.com/elastic/go-elasticsearch/v7 v7.5.1-0.20200407075928-339a2fa60690
 	github.com/getsentry/sentry-go v0.5.1
 	github.com/jinzhu/gorm v1.9.12
 	github.com/joho/godotenv v1.3.0

@@ -35,15 +35,15 @@ func TestValidateString(t *testing.T) {
 	})
 }
 
-func TestValidateDate(t *testing.T) {
+func TestValidateDateString(t *testing.T) {
 	t.Parallel()
 	t.Run("NIL_VALIDATE_DATE", func(t *testing.T) {
 		dt := time.Time{}
-		assert.Nil(t, ValidateDate(dt, constant.DateLayout))
+		assert.Nil(t, ValidateDateString(dt, constant.DateLayout))
 	})
 
 	t.Run("NOT_NIL_VALIDATE_DATE", func(t *testing.T) {
 		now := time.Now()
-		assert.NotNil(t, ValidateDate(now, constant.DateLayout))
+		assert.NotNil(t, ValidateDateString(now, constant.DateLayout))
 	})
 }

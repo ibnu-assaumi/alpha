@@ -9,8 +9,8 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/opentracing/opentracing-go"
 
-	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 	"github.com/Bhinneka/alpha/api/lib/tracer"
+	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 )
 
 // UpdateCharlie : update exsisting charlie data by given parameter from sql database
@@ -33,18 +33,6 @@ func (impl sql) UpdateCharlie(ctx context.Context, db *gorm.DB, param domainChar
 	err = db.Find(&result).Error
 	if err != nil {
 		tracer.SetErrorOpentracing(span, "sql_update", err)
-		sentry.CaptureException(err)
-		return param, err
-	}
-
-	chrlieHistory := domainCharlie.DomainHistory{
-		CharlieID:      param.CharlieID,
-		CharlieName:    param.CharlieName,
-		EmbeddedStatus: param.EmbeddedStatus,
-	}
-
-	if err = db.Create(&chrlieHistory).Error; err != nil {
-		tracer.SetErrorOpentracing(span, "sql_insert_history", err)
 		sentry.CaptureException(err)
 		return param, err
 	}
