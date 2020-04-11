@@ -6,10 +6,10 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/opentracing/opentracing-go"
 
-	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 	"github.com/Bhinneka/alpha/api/lib/constant"
 	"github.com/Bhinneka/alpha/api/lib/response"
 	"github.com/Bhinneka/alpha/api/lib/tracer"
+	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 )
 
 func (impl handler) deleteCharlie(c echo.Context) error {
@@ -25,7 +25,7 @@ func (impl handler) deleteCharlie(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, response.BadRequest(err))
 	}
 
-	res := impl.usecaseCharlie.DeleteCharlie(ctx, param)
+	res := impl.deliveryCharlie.DeleteCharlie(ctx, param)
 
 	return c.JSON(res.Code, res)
 }

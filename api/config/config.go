@@ -4,8 +4,8 @@ import (
 	"context"
 	"sync"
 
-	elasticsearch7 "github.com/elastic/go-elasticsearch/v7"
 	"github.com/jinzhu/gorm"
+	"github.com/olivere/elastic/v7"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/Bhinneka/alpha/api/config/internal/elasticsearch"
@@ -24,7 +24,7 @@ var (
 	// MongoDB : mongodb database client
 	MongoDB *mongo.Database
 	// ElasticSearch : elastic search client
-	ElasticSearch *elasticsearch7.Client
+	ElasticSearch *elastic.Client
 )
 
 // Init : initialize configuration once

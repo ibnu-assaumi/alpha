@@ -13,9 +13,9 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"github.com/Bhinneka/alpha/api/config"
-	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 	"github.com/Bhinneka/alpha/api/lib/constant"
 	"github.com/Bhinneka/alpha/api/lib/record"
+	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 	mockRepo "github.com/Bhinneka/alpha/api/service/repository/v1/charlie/mocks"
 )
 
@@ -41,7 +41,7 @@ func Test_usecase_UpdateCharlie(t *testing.T) {
 			CharlieName: param.CharlieName,
 			EmbeddedStatus: record.EmbeddedStatus{
 				UserUp:       1,
-				DateUp:       time.Now(),
+				DateUp:       time.Now().UTC(),
 				StatusRecord: constant.StatusRecordUpdate,
 			},
 		}

@@ -30,6 +30,15 @@ func ValidateDateString(date time.Time, layout string) *string {
 	return &dateString
 }
 
+// ValidateDateTimeString : validate date time string
+func ValidateDateTimeString(date time.Time) *string {
+	if date.IsZero() {
+		return nil
+	}
+	dateString := date.Format(time.RFC3339)
+	return &dateString
+}
+
 // ValidateDateTime : validate empty date return as date
 func ValidateDateTime(date time.Time) *time.Time {
 	if date.IsZero() {

@@ -3,11 +3,11 @@ package charlie
 import (
 	"github.com/labstack/echo/v4"
 
-	usecaseCharlie "github.com/Bhinneka/alpha/api/service/usecase/v1/charlie"
+	deliveryCharlie "github.com/Bhinneka/alpha/api/service/delivery/v1/charlie"
 )
 
 type handler struct {
-	usecaseCharlie usecaseCharlie.UseCase
+	deliveryCharlie deliveryCharlie.Delivery
 }
 
 // Handler : charlie rest http handler
@@ -18,7 +18,7 @@ type Handler interface {
 // NewHandler : new charlie rest http handler
 func NewHandler() Handler {
 	return handler{
-		usecaseCharlie: usecaseCharlie.NewUseCase(),
+		deliveryCharlie: deliveryCharlie.NewDelivery(),
 	}
 }
 

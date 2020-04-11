@@ -11,7 +11,7 @@ import (
 type usecase struct {
 	repoSQL     repoCharlie.SQL
 	repoMongo   repoCharlie.MongoDB
-	repoElastic repoCharlie.Elastic
+	repoElastic repoCharlie.ES
 }
 
 // UseCase : charlie business logic layer
@@ -27,6 +27,6 @@ func NewUseCase() UseCase {
 	return usecase{
 		repoSQL:     repoCharlie.NewSQL(),
 		repoMongo:   repoCharlie.NewMongoDB(),
-		repoElastic: repoCharlie.NewElastic(),
+		repoElastic: repoCharlie.NewES(),
 	}
 }

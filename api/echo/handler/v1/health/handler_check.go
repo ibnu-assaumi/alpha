@@ -8,5 +8,5 @@ import (
 )
 
 func (impl handler) Check(c echo.Context) error {
-	return c.JSON(http.StatusOK, time.Now().String())
+	return c.JSON(http.StatusOK, time.Now().UTC().String())
 }

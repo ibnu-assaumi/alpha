@@ -14,8 +14,8 @@ import (
 	"github.com/Bhinneka/alpha/api/lib/record"
 	"github.com/opentracing/opentracing-go"
 
-	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 	"github.com/Bhinneka/alpha/api/lib/response"
+	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 )
 
 // DeleteCharlie : delete existing charlie busines logic process
@@ -52,13 +52,11 @@ func (impl usecase) DeleteCharlie(ctx context.Context, param domainCharlie.Param
 		return response.BadRequest(err)
 	}
 
-	embeddedStatus := record.EmbeddedStatus{
+	paramCharlie.EmbeddedStatus = record.EmbeddedStatus{
 		UserUp:       1,
-		DateUp:       time.Now(),
+		DateUp:       time.Now().UTC(),
 		StatusRecord: constant.StatusRecordDelete,
 	}
-
-	paramCharlie.EmbeddedStatus = embeddedStatus
 
 	data, err := impl.repoSQL.DeleteCharlie(spanCTX, db, paramCharlie)
 	if err != nil {

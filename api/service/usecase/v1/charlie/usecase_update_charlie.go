@@ -35,42 +35,41 @@ func (impl usecase) UpdateCharlie(ctx context.Context, param domainCharlie.Param
 		CharlieID: param.CharlieID,
 	}
 
-	db := config.PostgresWrite.Begin()
-	isCharlieExists, err := impl.repoSQL.IsExistsCharlie(spanCTX, db, paramCharlie)
+	sqlWrite := config.PostgresWrite.Begin()
+	isCharlieExists, err := impl.repoSQL.IsExistsCharlie(spanCTX, sqlWrite, paramCharlie)
 	if err != nil {
-		db.Rollback()
+		sqlWrite.Rollback()
 		return response.InternalServerError()
 	}
 
 	if !isCharlieExists {
-		db.Rollback()
+		sqlWrite.Rollback()
 		err = fmt.Errorf("charlieID '%v' does not exists", param.CharlieID)
 		tracer.SetErrorOpentracing(span, constant.ErrorTypeNotExists, err)
 		return response.BadRequest(err.Error())
 	}
 
 	paramCharlie.CharlieName = param.CharlieName
-
-	embeddedStatus := record.EmbeddedStatus{
+	paramCharlie.EmbeddedStatus = record.EmbeddedStatus{
 		UserUp:       1,
-		DateUp:       time.Now(),
+		DateUp:       time.Now().UTC(),
 		StatusRecord: constant.StatusRecordUpdate,
 	}
 
-	paramCharlie.EmbeddedStatus = embeddedStatus
-
-	data, err := impl.repoSQL.UpdateCharlie(spanCTX, db, paramCharlie)
+	data, err := impl.repoSQL.UpdateCharlie(spanCTX, sqlWrite, paramCharlie)
 	if err != nil {
-		db.Rollback()
+		sqlWrite.Rollback()
 		return response.InternalServerError()
 	}
 
-	db.Commit()
+	if err := impl.repoElastic.UpsertCharlie(spanCTX, config.ElasticSearch, data); err != nil {
+		sqlWrite.Rollback()
+		return response.InternalServerError()
+	}
 
-	ctxStorage := context.Background()
-	go impl.repoMongo.InsertCharlieHistory(ctxStorage, config.MongoDB, data)
+	sqlWrite.Commit()
 
-	go impl.repoElastic.UpsertCharlie(ctxStorage, config.ElasticSearch, data)
+	go impl.repoMongo.InsertCharlieHistory(config.MongoDB, data)
 
 	meta := response.Meta{
 		TotalData: 1,

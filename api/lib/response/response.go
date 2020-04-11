@@ -15,10 +15,10 @@ type Response struct {
 
 // Meta : response meta
 type Meta struct {
-	Page      int `json:"page"`
-	Limit     int `json:"limit"`
-	TotalPage int `json:"totalPage"`
-	TotalData int `json:"totalData"`
+	Page      int   `json:"page"`
+	Limit     int   `json:"limit"`
+	TotalPage int64 `json:"totalPage"`
+	TotalData int64 `json:"totalData"`
 }
 
 // BadRequest : response bad request helper

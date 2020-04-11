@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"sync"
 	"time"
 
 	"github.com/opentracing/opentracing-go"
@@ -15,16 +14,14 @@ import (
 	domainCharlie "github.com/Bhinneka/alpha/api/service/domain/v1/charlie"
 )
 
-var mutexMongo = &sync.Mutex{}
-
-func (impl mongoDB) InsertCharlieHistory(ctx context.Context, db *mongo.Database, param domainCharlie.Domain) {
-	mutexMongo.Lock()
-
+func (impl mongoDB) InsertCharlieHistory(db *mongo.Database, param domainCharlie.Domain) {
 	var (
 		retry         int
 		opertaionName string = "Repository_Mongodb_InsertCharlieHistory"
 		doc           interface{}
 	)
+
+	ctx := context.Background()
 
 	span := opentracing.StartSpan(opertaionName)
 	defer span.Finish()
@@ -45,5 +42,4 @@ func (impl mongoDB) InsertCharlieHistory(ctx context.Context, db *mongo.Database
 		log.Println(fmt.Sprintf("error mongodb insert charlie : %s, retrying in %v seconds", err.Error(), retry))
 		time.Sleep(time.Duration(retry) * time.Second)
 	}
-	mutexMongo.Unlock()
 }

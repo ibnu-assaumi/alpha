@@ -11,12 +11,14 @@ const (
 	ErrorTypeExists string = "record_already_exists"
 	// ErrorTypeSQLQuery : error type when querying record
 	ErrorTypeSQLQuery string = "sql_query"
-	// ErrorTypeSQLInsert : error type when inserting record
+	// ErrorTypeSQLInsert : error sql type when inserting record
 	ErrorTypeSQLInsert string = "sql_insert"
-	// ErrorTypeSQLInsertHistory : error type when inserting history record
+	// ErrorTypeSQLInsertHistory : error sql type when inserting history record
 	ErrorTypeSQLInsertHistory string = "sql_insert_history"
-	// ErrorTypeSQLUpdate : error type when updating record
+	// ErrorTypeSQLUpdate : error sql type when updating record
 	ErrorTypeSQLUpdate string = "sql_update"
-	// ErrorTypeSQLDelete : error type when deleting record
+	// ErrorTypeSQLDelete : error sql type when deleting record
 	ErrorTypeSQLDelete string = "sql_delete"
+	// ErroTypeESQuery : error elasticsearch type when querying record
+	ErroTypeESQuery string = "es_query"
 )

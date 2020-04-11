@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/Bhinneka/alpha/api/config"
-
 	"github.com/Bhinneka/alpha/api/migration/sql"
 )
 
@@ -22,6 +21,13 @@ func MigrateSQL() {
 	wg.Add(1)
 	go func() {
 		sql.MigrateCharlie(db)
+		wg.Done()
+	}()
+
+	wg.Add(1)
+	go func() {
+		sql.MigrateBeta(db)
+		sql.MigrateBetaCharlie(db)
 		wg.Done()
 	}()
 

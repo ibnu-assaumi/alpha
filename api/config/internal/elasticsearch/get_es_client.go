@@ -1,25 +1,33 @@
 package elasticsearch
 
 import (
+	"log"
 	"os"
-	"strings"
+	"strconv"
 
-	"github.com/elastic/go-elasticsearch/v7"
+	"github.com/olivere/elastic/v7"
 )
 
 // GetESClient : get elastic search client
-func GetESClient() *elasticsearch.Client {
-	hosts := strings.Split(os.Getenv("ELASTIC_7_HOST"), ",")
-	cfg := elasticsearch.Config{
-		Addresses: hosts,
-	}
-	es, err := elasticsearch.NewClient(cfg)
+func GetESClient() *elastic.Client {
+	client, err := elastic.NewClient(
+		elastic.SetSniff(false),
+		elastic.SetURL(
+			os.Getenv("ELASTIC_HOST_1"),
+		),
+		// elastic.SetBasicAuth(
+		// 	os.Getenv("ELASTIC_USERNAME"),
+		// 	os.Getenv("ELASTIC_PASSWORD"),
+		// ),
+	)
 	if err != nil {
 		panic(err)
 	}
-	_, err = es.Info()
-	if err != nil {
-		panic(err)
+
+	_, err = strconv.ParseBool(os.Getenv("SERVER_LOG_MODE"))
+	if err == nil {
+		elastic.SetTraceLog(log.New(os.Stdout, "", log.LstdFlags))
 	}
-	return es
+
+	return client
 }

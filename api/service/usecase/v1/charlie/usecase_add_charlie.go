@@ -35,41 +35,40 @@ func (impl usecase) AddCharlie(ctx context.Context, param domainCharlie.ParamAdd
 		CharlieName: param.CharlieName,
 	}
 
-	db := config.PostgresWrite.Begin()
+	sqlRead := config.PostgresRead
 
-	isCharlieExists, err := impl.repoSQL.IsExistsCharlie(spanCTX, db, paramCharlie)
+	isCharlieExists, err := impl.repoSQL.IsExistsCharlie(spanCTX, sqlRead, paramCharlie)
 	if err != nil {
-		db.Rollback()
 		return response.InternalServerError()
 	}
 
 	if isCharlieExists {
-		db.Rollback()
 		err = fmt.Errorf("charlieName '%s' already exists", param.CharlieName)
 		tracer.SetErrorOpentracing(span, constant.ErrorTypeExists, err)
 		return response.BadRequest(err.Error())
 	}
 
-	status := record.EmbeddedStatus{
+	paramCharlie.EmbeddedStatus = record.EmbeddedStatus{
 		UserIn:       1,
-		DateIn:       time.Now(),
+		DateIn:       time.Now().UTC(),
 		StatusRecord: constant.StatusRecordNew,
 	}
 
-	paramCharlie.EmbeddedStatus = status
-
-	data, err := impl.repoSQL.InsertCharlie(spanCTX, db, paramCharlie)
+	sqlWrite := config.PostgresWrite.Begin()
+	data, err := impl.repoSQL.InsertCharlie(spanCTX, sqlWrite, paramCharlie)
 	if err != nil {
-		db.Rollback()
+		sqlWrite.Rollback()
 		return response.InternalServerError()
 	}
 
-	db.Commit()
+	if err := impl.repoElastic.UpsertCharlie(spanCTX, config.ElasticSearch, data); err != nil {
+		sqlWrite.Rollback()
+		return response.InternalServerError()
+	}
 
-	ctxStorage := context.Background()
-	go impl.repoMongo.InsertCharlieHistory(ctxStorage, config.MongoDB, data)
+	sqlWrite.Commit()
 
-	go impl.repoElastic.UpsertCharlie(ctxStorage, config.ElasticSearch, data)
+	go impl.repoMongo.InsertCharlieHistory(config.MongoDB, data)
 
 	meta := response.Meta{
 		TotalData: 1,
